@@ -1,0 +1,112 @@
+Informe del paquete
+
+-----------------------------------------------------------------------------
+Documento:
+Nombre: App TuDo Interfax.ai
+Modo de color: Color RGB
+Perfil de color: sRGB IEC61966-2.1
+Unidades de regla: centímetros
+Dimensiones de la mesa de trabajo: 29.3072 cm x 52.1016 cm
+Mostrar imágenes en modo contorno: Desactivado
+Resaltar fuentes sustituidas: Desactivado
+Resaltar glifos sustituidos: Desactivado
+Conservar capacidad de edición de texto
+Simular papel de color: Desactivado
+
+-----------------------------------------------------------------------------
+Objetos de tintas planas:
+
+-----------------------------------------------------------------------------
+Fuentes no disponibles:Ninguno
+
+-----------------------------------------------------------------------------
+Fuentes protegidas no empaquetadas:Ninguno
+
+-----------------------------------------------------------------------------
+Fuentes:
+RNS Sanz Normal (OTF)
+RNS Sanz SemiBold (OTF)
+RNS Sanz Bold (OTF)
+RNS Sanz Light (OTF)
+
+-----------------------------------------------------------------------------
+Fuentes incrustadas:
+Ninguno
+
+-----------------------------------------------------------------------------
+Enlaces no disponibles:
+Ninguno
+
+-----------------------------------------------------------------------------
+Imágenes enlazadas:
+
+H:\DISCO 1\Tecneo\Clientes Ocacionales\App TuDo\Recusos\Fotos\phone-trial.jpg
+Tipo: RGB
+Bits por píxel: 24
+Canales: 3
+Tamaño: 3071K, 1254 por 836 píxeles
+Dimensiones: 2214.388 por 1476.259 puntos 
+Resolución: 40.773 por 40.773 píxeles por pulgada
+
+
+H:\DISCO 1\Tecneo\Clientes Ocacionales\App TuDo\Recusos\Fotos\phone-trial.jpg
+Tipo: RGB
+Bits por píxel: 24
+Canales: 3
+Tamaño: 3071K, 1254 por 836 píxeles
+Dimensiones: 2214.388 por 1476.259 puntos 
+Resolución: 40.773 por 40.773 píxeles por pulgada
+
+
+H:\DISCO 1\Tecneo\Clientes Ocacionales\App TuDo\Recusos\Foto 3.jpg
+Tipo: RGB
+Bits por píxel: 24
+Canales: 3
+Tamaño: 1780K, 721 por 843 píxeles
+Dimensiones: 421.601 por 492.94 puntos 
+Resolución: 123.131 por 123.131 píxeles por pulgada
+
+
+H:\DISCO 1\Tecneo\Clientes Ocacionales\App TuDo\Recusos\Fotos\saude-docaminhoneiro-1160x700.jpg
+Tipo: RGB
+Bits por píxel: 24
+Canales: 3
+Tamaño: 2378K, 1160 por 700 píxeles
+Dimensiones: 2447.429 por 1476.897 puntos 
+Resolución: 34.126 por 34.126 píxeles por pulgada
+
+
+H:\DISCO 1\Tecneo\Clientes Ocacionales\App TuDo\Recusos\Fotos\slider-one.jpg
+Tipo: RGB
+Bits por píxel: 24
+Canales: 3
+Tamaño: 5009K, 1601 por 1068 píxeles
+Dimensiones: 2213.963 por 1476.897 puntos 
+Resolución: 52.066 por 52.066 píxeles por pulgada
+
+
+H:\DISCO 1\Tecneo\Clientes Ocacionales\App TuDo\Recusos\Foto 3.jpg
+Tipo: RGB
+Bits por píxel: 24
+Canales: 3
+Tamaño: 1780K, 721 por 843 píxeles
+Dimensiones: 791.047 por 924.9 puntos 
+Resolución: 65.624 por 65.624 píxeles por pulgada
+
+
+H:\DISCO 1\Tecneo\Clientes Ocacionales\App TuDo\Recusos\Foto 2.jpg
+Tipo: RGB
+Bits por píxel: 24
+Canales: 3
+Tamaño: 1010K, 409 por 843 píxeles
+Dimensiones: 223.57 por 460.805 puntos 
+Resolución: 131.717 por 131.717 píxeles por pulgada
+
+
+H:\DISCO 1\Tecneo\Clientes Ocacionales\App TuDo\Recusos\Foto 2.jpg
+Tipo: RGB
+Bits por píxel: 24
+Canales: 3
+Tamaño: 1010K, 409 por 843 píxeles
+Dimensiones: 524.236 por 1080.516 puntos 
+Resolución: 56.173 por 56.173 píxeles por pulgada

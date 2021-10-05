@@ -1,21 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import NavigationStack from './src/navigation/NavigationStack';
+import UtilitiesContext from './src/context/UtilitiesContext';
+import AuthContext from './src/context/AuthContext';
+import { useFonts } from 'expo-font';
+
 
 export default function App() {
+
+  const [loaded] = useFonts({
+    rns: require('./assets/font/RNSSanz-Normal.otf'),
+    rns_semi: require('./assets/font/RNSSanz-SemiBold.otf'),
+    rns_bold: require('./assets/font/RNSSanz-Bold.otf'),
+  });
+
+
+  if (!loaded) {
+    return null;
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <>
+      <AuthContext.Provider>
+        <UtilitiesContext.Provider>
+          <NavigationStack />
+        </UtilitiesContext.Provider>
+      </AuthContext.Provider>
+    </>);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
