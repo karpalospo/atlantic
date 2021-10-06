@@ -25,7 +25,6 @@ const Login = (props) => {
 
 
     const login = async () => {
-        //console.log(usuario, password)
 
         setLoading(true)
         const res = await API.POST.SignIn(usuario, password)

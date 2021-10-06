@@ -9,6 +9,7 @@ import SplashStack from './SplashStack'
 import {Feather, Entypo} from 'react-native-vector-icons'
 import { styles, COLORS } from '../global/styles'
 import UserTitle from '../components/UserTitle'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from '../components/Button'
 
@@ -87,7 +88,10 @@ const NavigationStack = () => {
                                             title="Cerrar Sesión"
                                             styleMode="blue"
                                             buttonStyle={{minWidth:200}}
-                                            onPress={() => {setAuth(false, {}); props.navigation.navigate("Home")}}
+                                            onPress={async () => {
+                                                setAuth(false, {}); 
+                                                await AsyncStorage.removeItem('user'); 
+                                            }}
                                         />
                                     </View>
                                 </View>

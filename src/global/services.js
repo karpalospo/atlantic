@@ -120,6 +120,15 @@ export const API = {
 
         },
 
+        async setServiceData (params = {})
+        {
+         
+            return await fetchAsync(`${URL.server2}/servicedata`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+
+        },
+
+        
+
         async signUp (fields)
         {
             const _fields = {
@@ -135,7 +144,7 @@ export const API = {
                 t_sangre: fields.phone,
                 tipo: fields.tipo
             }
-console.log(JSON.stringify(_fields))
+
             let response = await fetchAsync(`${URL.server2}/signup/`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(_fields), headers: HEADER_JSON});
             
             if(!response.message.success)

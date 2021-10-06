@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, SafeAreaView, TextInput, KeyboardAvoidingView, Text, Platform, Image, ScrollView } from 'react-native'
+import { View, SafeAreaView, TextInput, Linking, Text, Platform, Image, ScrollView } from 'react-native'
 import { styles, COLORS } from '../global/styles'
 import Button from '../components/Button'
 
@@ -7,7 +7,8 @@ import Header from "../components/Header";
 import StepIndicator from 'react-native-step-indicator';
 import UserTitle from '../components/UserTitle'
 import Card from '../components/Card'
-
+import { UtilitiesContext } from '../context/UtilitiesContext'
+import { API } from '../global/services'
 
 const labels = ["En Proceso","Entregado","Cancelado"];
 
@@ -38,15 +39,46 @@ const customStyles = {
 
 const Status = (props) => {
  
-    const [password, setPassword] = useState("");
-    const [usuario, setUsuario] = useState("");
+    const { loopServicesID } = useContext(UtilitiesContext)
+
     const [currentPosition, setcurrentPosition] = useState(0);
 
-    const currentUsuario = {
-        nombres: "Carlos",
-        apellidos: "Fernandez"
+    const [userClient, setUserClient] = useState(false);
+    const [data, setData] = useState(false);
+    const [user, setUser] = useState(false);
+    const [extradata, setExtradata] = useState({});
+
+    const callback = (data) => {
+
+        if(data.user) {
+            if(data.user.nombres) {
+                let nombres = data.user.nombres.split(" ")
+                let apellidos = data.user.apellidos.split(" ")
+
+                data.user.shortname = data.user.nombres + " " + data.user.apellidos
+                if(nombres.length > 0) data.user.shortname = nombres[0]
+                if(apellidos.length > 0) data.user.shortname += " " + apellidos[0]
+            }
+
+            setUserClient(data.user)
+        }
+        setData(setExtradata)
     }
 
+    async function setStatus() {
+        if(!data) return
+        await API.POST.setServiceData({orden: data.orden, status:"tomado", domi: user})
+    }
+
+    useEffect(() => {
+        setData(props.route.params.data)
+        setUser(props.route.params.user)
+        loopServicesID(props.route.params.data.orden, callback)
+        setStatus()
+    });
+
+
+    //setServiceData
     const image = require("../../assets/face.jpg")
 
     return (
@@ -57,9 +89,9 @@ const Status = (props) => {
             <View style={{flex:1}}>
                 <ScrollView>
 
-                    <Text style={[styles.p, {paddingHorizontal:20, fontSize:15}]}>
+                    {/*<Text style={[styles.p, {paddingHorizontal:20, fontSize:15}]}>
                         Tu servicio ha sido solicitado a las 3:00 pm {"\n"} La hora estimada de entrega a las 3:30 pm
-                    </Text>
+    </Text>*/}
 
                     <View style={{height:10}} />
 
@@ -74,35 +106,41 @@ const Status = (props) => {
                         
                         <View style={{height:10}} />
 
+                        {data && 
                         <Card
-                            categoria="Envío de documento"
-                            dir1="Cra 51 # 79-155 Alto Prado"
-                            dir2="Cra 50 # 82-155 La Manga"
-                            valor="$12.000"
-                            orden="2047563"
+                            status={data.status}
+                            fechaStatus={data.fecha}
+                            categoria={data.categoria}
+                            dir1={data.dir1}
+                            dir2={data.dir2}
+                            valor={data.valor}
+                            orden={data.orden}
                         />
+                        }
 
-                        <View style={{height:20}} />
+                        {userClient &&
+                            <View>
+                                <View style={{height:20}} />
+                                <View style={{borderWidth:1, borderColor:"#ddd", borderRadius: 8, padding:15}}>
+                                    <UserTitle 
+                                        type="Cliente" 
+                                        name={`${userClient.shortname}`}
+                                        image={image} 
+                                    />  
+                            
 
+                                    <View style={{height:20}} />
 
-                        <View style={{borderWidth:1, borderColor:"#ddd", borderRadius: 8, padding:15}}>
-                            <UserTitle 
-                                type="Cliente" 
-                                name={`${currentUsuario.nombres} ${currentUsuario.apellidos}`}
-                                image={image} 
-                            />  
-                    
+                                
+                                    <View style={[styles.row, {justifyContent:"center"}]}>
+                                        <Button title="Mensaje" onPress={() => {}} styleMode="blue" buttonStyle={{minWidth:120}} />
+                                        <View style={{width:20}}/>
+                                        <Button title="Llamar" onPress={() => Linking.openURL(`tel:${userClient.celular}`)} styleMode="blue" buttonStyle={{minWidth:120}} />
+                                    </View>
+                                </View>
 
-                            <View style={{height:20}} />
-
-                        
-                            <View style={[styles.row, {justifyContent:"center"}]}>
-                                <Button title="Mensaje" onPress={() => {}} styleMode="blue" buttonStyle={{minWidth:120}} />
-                                <View style={{width:20}}/>
-                                <Button title="Llamar" onPress={() => {}} styleMode="blue" buttonStyle={{minWidth:120}} />
                             </View>
-                        </View>
-
+                        }
                         <View style={{height:30}} />
 
                     </View>

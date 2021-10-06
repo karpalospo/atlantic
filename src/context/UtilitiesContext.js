@@ -1,51 +1,65 @@
 import React, { useState, createContext } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native'
+import { API } from '../global/services'
 
 export const UtilitiesContext = createContext();
 
 const Provider = ({ children }) => {
-    const [userSignUp, setUserSignUp] = useState({
-        commerce_phone: '',
-        manager_password: '',
-        document_type: 0,
-        commerce_dni: '',
-        accept_data_policy: false,
-        accept_term_and_conditions: false,
-        manager_dni: '',
-        manager_date_of_birth: ''
-    })
+
     const [conversion, setConversion] = useState(0)
     const [userDetails, setUserDetails] = useState(null)
     const [code, setCode] = useState(null)
     const [balance, setBalance] = useState({})
-    /**
-     * @param {*} commerce_phone 
-     * @param {*} manager_password 
-     * @param {*} document_type 
-     * @param {*} commerce_dni 
-     * @param {*} accept_data_policy
-     * @param {*} accept_term_and_conditions 
-     */
 
-    const saveUserSignUp = async (commerce_phone, manager_password, document_type, commerce_dni, accept_data_policy, accept_term_and_conditions, manager_dni, manager_date_of_birth) => {
-        const data = {
-            commerce_phone,
-            manager_password,
-            document_type,
-            commerce_dni,
-            accept_data_policy,
-            accept_term_and_conditions,
-            manager_dni: manager_dni || '',
-            manager_date_of_birth,
-            manager_document_type: 1
-        }
-        setUserSignUp(data)
+    
+    let loopingServices = false
+    let loopingServicesID = false
+    
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
+
+    const loopServices = async (callback) => {
+        
+        if(loopingServices) return
+        loopingServices = true
+
+        for(let i = 0; i <= 9999999; i++) {
+   
+            const res = await API.POST.getServices()
+            if(!res.error) {
+                if(res.message.data) {
+                    callback(res.message.data)
+                }
+            }
+            await sleep(4000);
+        }
+ 
+    }
+
+    const loopServicesID = async (orden, callback) => {
+        
+        if(loopingServicesID) return
+        loopingServicesID = true
+
+        for(let i = 0; i <= 9999999; i++) {
+   
+            const res = await API.POST.getServices({orden})
+
+            if(!res.error) {
+                if(res.message.data) {
+                    callback(res.message.data[orden])
+                }
+            }
+            await sleep(6000);
+        }
+ 
+    }
+
+
+
     const value = {
-        userSignUp,
-        setUserSignUp,
-        saveUserSignUp,
         setUserDetails,
         userDetails,
         balance,
@@ -53,7 +67,11 @@ const Provider = ({ children }) => {
         setConversion,
         conversion,
         code,
-        setCode
+        setCode,
+
+        loopServices,
+        loopServicesID
+
     }
     return (
         <UtilitiesContext.Provider value={value}>

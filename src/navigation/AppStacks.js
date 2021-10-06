@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { AuthContext } from '../context/AuthContext'
 
 
+import Blank from '../screens/Blank'
 import Home from '../screens/Home'
 import HomeDomi from '../screens/HomeDomi'
 import Express from '../screens/Express'
@@ -37,8 +38,9 @@ const AppStacks = () => {
     });
 
     return (
-        <Stack.Navigator initialRouteName={"Home"}>
+        <Stack.Navigator initialRouteName={"Blank"}>
 
+            <Stack.Screen name='Blank' component={Blank} options={{ headerShown:false }}/>
             <Stack.Screen name='Home' component={Home} options={{ headerShown:false }}/>
             <Stack.Screen name='HomeDomi' component={HomeDomi} options={{ headerShown:false }}/>
             <Stack.Screen name='Express' component={Express} options={{ headerShown:false }}/>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, SafeAreaView, TextInput, KeyboardAvoidingView, Text, Platform, Image, ScrollView } from 'react-native'
+import { View, SafeAreaView, TextInput, Linking, Text, Platform, Image, ScrollView, ActivityIndicator } from 'react-native'
 import { styles, COLORS } from '../global/styles'
 import Button from '../components/Button'
 
@@ -7,8 +7,8 @@ import Header from "../components/Header";
 import StepIndicator from 'react-native-step-indicator';
 import UserTitle from '../components/UserTitle'
 import Card from '../components/Card'
-
-
+import { UtilitiesContext } from '../context/UtilitiesContext'
+import { API } from '../global/services'
 
 
 
@@ -41,16 +41,52 @@ const customStyles = {
 
 const Status = (props) => {
  
-    const [password, setPassword] = useState("");
-    const [usuario, setUsuario] = useState("");
     const [currentPosition, setcurrentPosition] = useState(0);
+    const [domiciliario, setDomiciliario] = useState(false);
+    const { loopServicesID } = useContext(UtilitiesContext)
+
+    const [userDomi, setUserDomi] = useState(false);
+
+    const [data, setData] = useState(false);
+    const [user, setUser] = useState(false);
+    const [extradata, setExtradata] = useState({});
 
     const image = require("../../assets/face.jpg")
+
+    const callback = (data) => {
+        if(data.domi) {
+            if(data.domi.nombres) {
+                let nombres = data.domi.nombres.split(" ")
+                let apellidos = data.domi.apellidos.split(" ")
+
+                data.domi.shortname = data.domi.nombres + " " + data.domi.apellidos
+                if(nombres.length > 0) data.domi.shortname = nombres[0]
+                if(apellidos.length > 0) data.domi.shortname += " " + apellidos[0]
+            }
+
+            setUserDomi(data.domi)
+        }
+        setExtradata(data)
+
+    }
+
+    async function setStatus() {
+        if(!data) return
+        await API.POST.setServiceData({orden: data.orden, user})
+    }
+
+    useEffect(() => {
+        setData(props.route.params.data)
+        setUser(props.route.params.user)
+        loopServicesID(props.route.params.data.orden, callback)
+        setStatus()
+    });
+
 
     return (
         <SafeAreaView style={{ flex: 1, position:"relative", backgroundColor:"white" }}>
             
-            <Header titleCenter="Estado del domicilio" onBack={() => props.navigation.navigate("Home")} />
+            <Header titleCenter="Estado del domicilio" navigation={props.navigation} onBack={() => props.navigation.navigate("Home")} />
            
             <ScrollView>
 
@@ -67,34 +103,52 @@ const Status = (props) => {
                     
                     <View style={{height:10}} />
 
+                    {data && 
                     <Card
-                        status="Entregado"
-                        fechaStatus="Sept 10 10:30pm"
-                        categoria="Envío de documento"
-                        dir1="Cra 51 # 79-155 Alto Prado"
-                        dir2="Cra 50 # 82-155 La Manga"
-                        valor="$12.000"
-                        orden="2047563"
+                        status={data.status}
+                        fechaStatus={data.fecha}
+                        categoria={data.categoria}
+                        dir1={data.dir1}
+                        dir2={data.dir2}
+                        valor={data.valor}
+                        orden={data.orden}
                     />
+                    }
 
                     <View style={{height:20}} />
 
-                    <UserTitle 
-                        domiMode 
-                        name="Benito Suarez" 
-                        image={image} 
-                        data={{placa: "BMX081", rep: 4.7}}
-                        
-                    />  
-                
 
-                    <View style={{height:50}} />
-
-                    <View style={[styles.row, {justifyContent:"center"}]}>
-                        <Button title="Mensaje" onPress={() => {}} styleMode="blue" buttonStyle={{minWidth:150}} />
-                        <View style={{width:20}}/>
-                        <Button title="Llamar" onPress={() => {}} styleMode="blue" buttonStyle={{minWidth:150}} />
+                    {!userDomi &&
+                    <View>
+                        <ActivityIndicator color="#999" />
+                        <Text style={styles.p}>Esperando respuesta de un domiciliario</Text>
+                        <Text style={{fontSize:13, color:"#999", textAlign:"center", marginBottom:30}}>59 Segundos...</Text>
+                        <View style={[styles.row, {justifyContent:"center"}]}>
+                            <Button title="Cancelar" onPress={() => {}} styleMode="red" buttonStyle={{minWidth:150}} />
+                        </View>
                     </View>
+                    }
+                    {userDomi && 
+                    <View>
+                        <UserTitle 
+                            domiMode 
+                            name={userDomi.shortname}
+                            image={image} 
+                            data={{placa: userDomi.placa, rep: userDomi.rep}}
+                            
+                        />
+
+                        <View style={{height:50}} />
+
+                        <View style={[styles.row, {justifyContent:"center"}]}>
+                            <Button title="Mensaje" onPress={() => {}} styleMode="blue" buttonStyle={{minWidth:150}} />
+                            <View style={{width:20}}/>
+                            <Button title="Llamar" onPress={() => Linking.openURL(`tel:${userDomi.celular}`)} styleMode="blue" buttonStyle={{minWidth:150}} />
+                        </View>
+                    </View>
+                    }
+
+                    
 
                     <View style={{height:30}} />
 

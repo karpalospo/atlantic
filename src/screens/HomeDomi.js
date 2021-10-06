@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Text, View, SafeAreaView, Image} from "react-native";
-import { useFocusEffect } from '@react-navigation/native';
+import {Text, View, SafeAreaView, Image, ListViewComponent} from "react-native";
 import { COLORS, styles } from "../global/styles";
 import { AuthContext } from '../context/AuthContext'
-import { API } from '../global/services'
+import { UtilitiesContext } from '../context/UtilitiesContext'
+
 import Header from "../components/Header";
 import Button from '../components/Button'
 import { ScrollView } from "react-native-gesture-handler";
@@ -13,48 +13,31 @@ import Ranking from "../components/Ranking";
 
 const HomeDomi = (props) => {
 
-    const { isAuth, loading, getAuth, setAuth} = useContext(AuthContext)
+    const { getAuth} = useContext(AuthContext)
+    const { loopServices } = useContext(UtilitiesContext)
+
     const [user, setUser] = useState({});
-    const [services, setServices] = useState([]);
-    const [stopServices, setstopServices] = useState(false);
+    const [data, setData] = useState([]);
 
     async function init() {
         setUser(await getAuth())
     }
 
-    const {data=[]} = props
+    const callback = (data) => {
+        let servicios = []
+        Object.keys(data).forEach(key => servicios.push(data[key]))
+        setData(servicios)
+    }
 
     useEffect(() => {
         init()
-        iniciar()
+        loopServices(callback)
     });
-
 
     const image = require("../../assets/face.jpg")
 
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    const iniciar = async () => {
-        let res
-        while(!stopServices) {
-            res = await API.POST.getServices()
-            if(!res.error) {
-                if(res.message.data) {
-                    setServices(res.message.data)
-                }
-            }
-            await sleep(2000);
-        }
-  
-    }
-
-
-
-    const acceptService = (item) => {
-        //console.log(item)
-        props.navigation.navigate("StatusDomi", {item})
+    const acceptService = (data) => {
+        props.navigation.navigate("StatusDomi", {data, user})
     }
 
     return (
@@ -83,7 +66,7 @@ const HomeDomi = (props) => {
 
                     <View style={{height:20}} />
 
-                    {services.map((item, index) => {
+                    {data.map((item, index) => {
                         if(!item.orden) return null
                         else return (
                             <Card

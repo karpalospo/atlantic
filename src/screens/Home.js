@@ -37,37 +37,18 @@ const Home = (props) => {
                 />
             </View>
 
-            <View style={{height:230, backgroundColor:COLORS.mainBlue, alignItems:"center", justifyContent:"flex-start", borderTopLeftRadius:25, borderTopRightRadius:25, overflow:"hidden"}}>
-                {/*<Image
-                    style={{ width:"100%", position:"absolute", top:0, left:0, zIndex:-1}}
-                    source={bg}
-                    resizeMode="cover"
-                />*/}
-
-                <Text style={{paddingVertical:40, color:"white", fontSize:19}}>Selecciona el tipo de domicilio</Text>
-     
+            <View style={{height:130, backgroundColor:COLORS.mainBlue, alignItems:"center", justifyContent:"flex-start", borderTopLeftRadius:25, borderTopRightRadius:25, overflow:"hidden"}}>
+                <View style={{height:30}} />
                 <View style={{flexDirection: "row", paddingHorizontal: 30}}>
-                    <View style={{width:"48%"}}>
-                        <Button 
-                            minWidth={20}
-                            title="Express"
-                            styleMode={"blackText"}
-                            onPress={() => props.navigation.navigate("Express")}
-                        />
-                    </View>
-                    <View style={{width:"4%"}}/>
-                    <View style={{width:"48%"}}>
-                        <Button 
-                            title="A la medida"
-                            styleMode={"blackText"}
-                            onPress={() => props.navigation.navigate("Medida")}
-                        />
-                    </View>
+                    <Button 
+                        minWidth={20}
+                        title="Solicitar Servicio"
+                        styleMode={"blackText"}
+                        onPress={() => props.navigation.navigate("Express", {user})}
+                    />
                 </View>
 
             </View>
-
-            
             
         </SafeAreaView>
     );

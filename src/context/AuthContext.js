@@ -1,7 +1,6 @@
 import React, { useState, createContext, useContext } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native'
-import moment from 'moment'
+
 //import * as SecureStore from 'expo-secure-store';
 //import { deleteSecurelyMultipleValues, getSecurelyValueFor, saveSecurely } from '../helpers/secure_store/secure_utils';
 //import { SECURE_KEYS } from '../helpers/secure_store/secure_constants';
@@ -18,20 +17,20 @@ const Provider = ({ children }) => {
     const [user, setUser] = useState({logged:false})
 
     const [login, setLogin] = useState(async () => {
+
         try {
             setLoading(true)
-            setIsAuth(false)
-            /*//const access_token = await getSecurelyValueFor(SECURE_KEYS.ACCESS);
-            if (access_token) {
-                setIsAuth(true)
-                setTimeout(() => {
-                    setLoading(false)
-                }, 2000);
-                return
-            } else {
-                setLoading(false)
 
-            }*/
+            let cacheuser = await AsyncStorage.getItem('user')
+            if(cacheuser) {
+                cacheuser = JSON.parse(cacheuser)
+                if(cacheuser.nombres) {
+                    setUser(cacheuser)
+                    setIsAuth(true)
+                }
+            } else {
+                setIsAuth(false)
+            }
             setLoading(false)
 
         } catch (error) {
@@ -59,9 +58,10 @@ const Provider = ({ children }) => {
                 if(nombres.length > 0) user.shortname = nombres[0]
                 if(apellidos.length > 0) user.shortname += " " + apellidos[0]
             }
-            
+
             setUser(user)
             setIsAuth(value)
+            AsyncStorage.setItem('user', JSON.stringify(user))
         },
         /*activateAuth: async (token, refresh) => {
             try {

@@ -22,7 +22,7 @@ const Documentos = (props) => {
 
     async function init() {
         setUser( await getAuth())
-        console.log("xc", user, isAuth)
+
         _setState({
             nombres: user.nombres,
             apellidos: user.apellidos,
