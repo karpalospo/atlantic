@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState} from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { View, Text, InteractionManager } from 'react-native'
+import { View, Text, ActivityIndicator, SafeAreaView } from 'react-native'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AuthContext } from '../context/AuthContext'
 import AuthStack from './AuthStack'
 import AppStacks from './AppStacks'
-import SplashStack from './SplashStack'
 import {Feather, Entypo} from 'react-native-vector-icons'
 import { styles, COLORS } from '../global/styles'
 import UserTitle from '../components/UserTitle'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import Button from '../components/Button'
 
@@ -46,60 +46,75 @@ function MenuItem(props) {
 const NavigationStack = () => {
      
     const { isAuth, loading, getAuth, setAuth} = useContext(AuthContext)
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(false);
 
-    async function init() {
-        setUser( await getAuth())
-    }
 
     useEffect(() => {
-        init()
-
+        if(user) return
+        (async function () {
+            setUser(await getAuth())
+        })()
     });
+
 
     return (
         <NavigationContainer>
  
             {loading ? 
-                <SplashStack/> : 
-                isAuth === false ? 
-                    <AuthStack /> 
-                    : 
-                    <Drawer.Navigator
-                        screenOptions={{drawerStyle: {width: "80%"}}}
-                        drawerContent={props => 
-                            <DrawerContentScrollView {...props}>
-            
-                                <TouchableOpacity onPress={() => props.navigation.closeDrawer()}>
-                                    <Entypo name={"chevron-thin-left"} color={COLORS.mainBlue} size={28} style={{padding:10}} />
-                                </TouchableOpacity>
-                        
-                                <View style={{padding:20}}>
-                                    <UserTitle name={user.shortname} image={image} type={user.tipo == "domi" ? "Domiciliario" : "Cliente"}  />
-                                    <View style={{height:20}}/>
-                                    <MenuItem title="Mi Perfíl" subtitle="Edita tus datos básicos y de contacto" onPress={() => props.navigation.navigate("Perfil")} />
-                                    {(user.tipo && user.tipo == "domi") && <MenuItem title="Mis Documentos" subtitle="Revisa el historial de tus domicilios" onPress={() => props.navigation.navigate("Documentos")} />}
-                                    <MenuItem title="Contraseña" subtitle="Edita tu contraseña de acceso" onPress={() => props.navigation.navigate("Contrasena")} />
-                                    <MenuItem title="Mis Domicilios" subtitle="Revisa el historial de tus domicilios" onPress={() => props.navigation.navigate("Domicilios")} />
-                                    <MenuItem title="Ayuda" subtitle="Consulta y aprende sobre Atlantiexpress" onPress={() => props.navigation.navigate("Ayuda")} />
-                                    <View style={{height:30}}/>
-                                    <View style={styles.rowCenter}>
-                                        <Button 
-                                            title="Cerrar Sesión"
-                                            styleMode="blue"
-                                            buttonStyle={{minWidth:200}}
-                                            onPress={async () => {
-                                                setAuth(false, {}); 
-                                                await AsyncStorage.removeItem('user'); 
-                                            }}
-                                        />
-                                    </View>
+
+                <SafeAreaView style={styles.main}>
+
+                    <View style={{flex:1, alignItems:"center", justifyContent:"center"}}>
+
+                        <ActivityIndicator color="#999" />
+                    </View>
+
+                </SafeAreaView >
+
+            : 
+            isAuth === false ? 
+                <AuthStack /> 
+                : 
+                <Drawer.Navigator
+                    screenOptions={{drawerStyle: {width: "80%"}}}
+                    drawerContent={props => 
+                        <DrawerContentScrollView {...props}>
+        
+                            <TouchableOpacity onPress={() => props.navigation.closeDrawer()}>
+                                <Entypo name={"chevron-thin-left"} color={COLORS.mainBlue} size={28} style={{padding:10}} />
+                            </TouchableOpacity>
+                    
+                            <View style={{padding:20}}>
+                                <UserTitle name={user.shortname} image={image} type={user.tipo == "domi" ? "Domiciliario" : "Cliente"}  />
+                                <View style={{height:20}}/>
+                                {user.tipo == "domi" ? 
+                                    <MenuItem title="Inicio" subtitle={"Monitorea los servicios activos"} onPress={() => props.navigation.navigate("HomeDomi")} />
+                                :
+                                    <MenuItem title="Inicio" subtitle={"Solicita aquí tu servicio"} onPress={() => props.navigation.navigate("Home")} />
+                                }
+                                <MenuItem title="Mi Perfíl" subtitle="Edita tus datos básicos y de contacto" onPress={() => props.navigation.navigate("Perfil")} />
+                                {(user.tipo && user.tipo == "domi") && <MenuItem title="Mis Documentos" subtitle="Revisa el historial de tus domicilios" onPress={() => props.navigation.navigate("Documentos")} />}
+                                <MenuItem title="Contraseña" subtitle="Edita tu contraseña de acceso" onPress={() => props.navigation.navigate("Contrasena")} />
+                                <MenuItem title="Mis Domicilios" subtitle="Revisa el historial de tus domicilios" onPress={() => props.navigation.navigate("Domicilios")} />
+                                {/*<MenuItem title="Ayuda" subtitle="Consulta y aprende sobre Atlantiexpress" onPress={() => props.navigation.navigate("Ayuda")} />*/}
+                                <View style={{height:30}}/>
+                                <View style={styles.rowCenter}>
+                                    <Button 
+                                        title="Cerrar Sesión"
+                                        styleMode="blue"
+                                        buttonStyle={{minWidth:200}}
+                                        onPress={async () => {
+                                            setAuth(false, {}); 
+                                        }}
+                                    />
                                 </View>
-                            </DrawerContentScrollView>
-                        }
-                    >
-                        <Drawer.Screen name="AppStacks" component={AppStacks} options={{ headerShown:false}} />
-                    </Drawer.Navigator>
+                                <View style={{height:30}}/>
+                            </View>
+                        </DrawerContentScrollView>
+                    }
+                >
+                    <Drawer.Screen name="AppStacks" component={AppStacks} options={{ headerShown:false}} />
+                </Drawer.Navigator>
                     
             }
         </NavigationContainer>

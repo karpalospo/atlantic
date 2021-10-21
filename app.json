@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "tudo",
-    "slug": "tudo",
+    "name": "Altantiexpress",
+    "slug": "atlantiexpress",
     "owner": "karpalospo",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -17,14 +17,19 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey":"AIzaSyCSHufZP3SrsM_B5syDB6HugWbbgqDqLxE"
+        }
+      },
+      "package": "com.karpalospo.tudo",
+      "permissions": [ "CAMERA", "CAMERA_ROLL" ],
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/favicon.png"

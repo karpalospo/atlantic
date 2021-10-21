@@ -6,8 +6,6 @@ import { AuthContext } from '../context/AuthContext'
 import Blank from '../screens/Blank'
 import Home from '../screens/Home'
 import HomeDomi from '../screens/HomeDomi'
-import Express from '../screens/Express'
-import Medida from '../screens/Medida'
 import Status from '../screens/Status'
 import StatusDomi from '../screens/StatusDomi'
 import Domicilios from '../screens/Domicilios'
@@ -43,8 +41,6 @@ const AppStacks = () => {
             <Stack.Screen name='Blank' component={Blank} options={{ headerShown:false }}/>
             <Stack.Screen name='Home' component={Home} options={{ headerShown:false }}/>
             <Stack.Screen name='HomeDomi' component={HomeDomi} options={{ headerShown:false }}/>
-            <Stack.Screen name='Express' component={Express} options={{ headerShown:false }}/>
-            <Stack.Screen name='Medida' component={Medida} options={{ headerShown:false }}/>
             <Stack.Screen name='Status' component={Status} options={{ headerShown:false }}/>
             <Stack.Screen name='StatusDomi' component={StatusDomi} options={{ headerShown:false }}/>
             <Stack.Screen name='Domicilios' component={Domicilios} options={{ headerShown:false }}/>

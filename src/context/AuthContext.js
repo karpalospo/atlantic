@@ -1,6 +1,6 @@
 import React, { useState, createContext, useContext } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { shortName } from '../global/functions'
 //import * as SecureStore from 'expo-secure-store';
 //import { deleteSecurelyMultipleValues, getSecurelyValueFor, saveSecurely } from '../helpers/secure_store/secure_utils';
 //import { SECURE_KEYS } from '../helpers/secure_store/secure_constants';
@@ -11,10 +11,8 @@ const Provider = ({ children }) => {
 
     const [isAuth, setIsAuth] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [provideToken, setProvidedToken] = useState(null)
 
-
-    const [user, setUser] = useState({logged:false})
+    const [user, setUser] = useState(false)
 
     const [login, setLogin] = useState(async () => {
 
@@ -44,58 +42,22 @@ const Provider = ({ children }) => {
     }
 
     const value = {
-        isAuth,
         login,
+        isAuth,
         loading,
         getAuth,
         setAuth: (value, user) => {
-
-            if(user.nombres) {
-                let nombres = user.nombres.split(" ")
-                let apellidos = user.apellidos.split(" ")
-
-                user.shortname = user.nombres + " " + user.apellidos
-                if(nombres.length > 0) user.shortname = nombres[0]
-                if(apellidos.length > 0) user.shortname += " " + apellidos[0]
-            }
-
+            
+            if(user.id) user.shortname = shortName(user)
             setUser(user)
             setIsAuth(value)
-            AsyncStorage.setItem('user', JSON.stringify(user))
-        },
-        /*activateAuth: async (token, refresh) => {
-            try {
-                const token_created = moment().format('HH:mm:ss')
-                const secureTokenPromises = [
-                    saveSecurely(SECURE_KEYS.ACCESS, token),
-                    saveSecurely(SECURE_KEYS.REFRESH, refresh),
-                    saveSecurely(SECURE_KEYS.TOKEN_CREATED, JSON.stringify(token_created))
-                ]; 
-                
-                await Promise.all(secureTokenPromises);
-
-                setLogin(true);
-                setIsAuth(true);
-                setProvidedToken(null)
-            } catch (error) {
+            if(value) {
+                AsyncStorage.setItem('user', JSON.stringify(user))
+            } else {
+                AsyncStorage.removeItem('user');
             }
-        },
+        }
 
-        removeAuth: async () => {
-
-            setLogin(false);
-            setIsAuth(false);
-            setProvidedToken(null)
-            try {
-                await deleteSecurelyMultipleValues([SECURE_KEYS.ACCESS, SECURE_KEYS.REFRESH, SECURE_KEYS.TOKEN_CREATED, SECURE_KEYS.FINGER])
-                const storageKeys = await AsyncStorage.getAllKeys();
-                await AsyncStorage.multiRemove(storageKeys);    
-            } catch (error) {
-                // TODO: what we gonna do removing async storage keys ???   
-            }
-        },*/
-        setProvidedToken,
-        provideToken
 
     }
 

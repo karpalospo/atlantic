@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { View, Text, Image, Platform, StatusBar, SafeAreaView } from 'react-native';
+import { View, Text, Image, Platform, StatusBar, SafeAreaView, Switch } from 'react-native';
 import {Feather, Entypo} from 'react-native-vector-icons'
 import { styles, COLORS } from '../global/styles'
 import * as WebBrowser from 'expo-web-browser';
@@ -9,7 +9,7 @@ import * as WebBrowser from 'expo-web-browser';
 const Header = (props) => {
     
 
-    const {onBack, titleCenter} = props
+    const {onBack, titleCenter, onSwitch, enableSwitch = false, noMenu} = props
 
 
     const logo = require("../../assets/logo-menu.png")
@@ -23,7 +23,6 @@ const Header = (props) => {
             {titleCenter ?
                 <StatusBar backgroundColor="white" barStyle="dark-content"/>
             :
-
                 <StatusBar backgroundColor={COLORS.mainBlue} barStyle="light-content"/>
             }
 
@@ -35,12 +34,15 @@ const Header = (props) => {
                         <Entypo name={"chevron-thin-left"} color={COLORS.mainBlue} size={28} style={{padding:10}} />
                     </TouchableOpacity>
                 :
+                    noMenu ? 
+                    <View style={{width:40}} /> 
+                    :
                     <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
                         <Feather name={"menu"} color={COLORS.mainBlue} size={34} style={{padding:10}} />
                     </TouchableOpacity>
                 }
 
-                {titleCenter && <Text style={{fontFamily: "rns_semi", fontSize:21, flex:1, textAlign:"center", paddingRight:50}}>{titleCenter}</Text>}
+                {titleCenter && <Text style={{fontFamily: "rns_semi", fontSize:21, flex:1, textAlign:"center"}}>{titleCenter}</Text>}
 
       
                 {!titleCenter && <Image
@@ -49,6 +51,19 @@ const Header = (props) => {
                         resizeMode="contain"
                     />
                 }
+
+                {onSwitch &&
+                <View style={{width:60}}>      
+                    <Switch
+                        trackColor={{ false: "#767577", true: COLORS.red }}
+                        thumbColor={enableSwitch ? "#fff" : "#f4f3f4"}
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={onSwitch}
+                        value={enableSwitch}
+                    />
+                </View>
+                }
+                {!onSwitch && <View style={{width:40}} /> }
 
             
             </View>

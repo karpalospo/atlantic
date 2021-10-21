@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, SafeAreaView, TextInput, Image, ScrollView } from 'react-native'
+import { View, SafeAreaView, TextInput, Image, ScrollView, Alert } from 'react-native'
 import { styles, COLORS } from '../global/styles'
 import Button from '../components/Button'
 import { CustomSelectPicker } from '../components/CustomSelectPicker'
 import Header from "../components/Header";
 import UserTitle from '../components/UserTitle'
 import { AuthContext } from '../context/AuthContext'
+import { API } from '../global/services'
+
+
 
 const Perfil = (props) => {
  
-    const [password, setPassword] = useState("");
+    const {getAuth, setAuth} = useContext(AuthContext)
+
     const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(false);
 
     const values = {
         tipoSangre: [{id: "0", label: "A+", value: "A+"}, {id: "1", label: "A-", value: "A-"}],
@@ -20,7 +25,6 @@ const Perfil = (props) => {
 
     const [state, _setState] = useState({});
 
-    const { getAuth} = useContext(AuthContext)
 
     useEffect(() => {
         async function init() {
@@ -43,8 +47,16 @@ const Perfil = (props) => {
         await _setState({...state, ...value})
     }
 
-    const signIn = async () => {
-        console.log(state)
+    const updateProfile = async () => {
+        let sendData = {...state}
+        sendData.id = user.id
+        setLoading(true)
+        const res = await API.POST.UpdateProfile(sendData)
+        setLoading(false)
+        if(!res.error && res.message.success) {
+            Alert.alert("Actualización", "La informacion se actualizó correctamente")
+            setAuth(true, {...user, ...state})
+        } else Alert.alert("Actualización", "Hubo un error al intentar grabar la información")
     }
    
 
@@ -96,8 +108,8 @@ const Perfil = (props) => {
                         <TextInput
                             style={styles.input}
                             placeholder={"Teléfono Celular"}
-                            value={state.telefono}
-                            onChangeText={v => setState({telefono: v})}
+                            value={state.celular}
+                            onChangeText={v => setState({celular: v})}
                         />
 
 
@@ -133,9 +145,10 @@ const Perfil = (props) => {
           
                         <View style={{alignItems:"center"}}>
                             <Button 
+                                loading={loading}
                                 title="Actualizar"
                                 buttonStyle={{minWidth:200}}
-                                onPress={signIn}
+                                onPress={updateProfile}
                             />
                     
                             <View style={{height:20}} />

@@ -29,7 +29,7 @@ export const CustomSelectPicker = ({
     return (
         <View style={{flex:1}}>
             <TouchableOpacity 
-                style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, height: '100%', ...style}} 
+                style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, ...style}} 
                 onPress={() => setModalVisible(true)}
             >
                 <Text style={{ fontSize: 16, flex:1 }}>{selectedItem ? selectedItem : placeHolder}</Text>

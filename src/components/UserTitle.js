@@ -8,8 +8,8 @@ const UserTitle = (props) => {
     const {name, image, type, data, domiMode} = props
 
 
-    const imageSize = domiMode ? { width: 90, height:90} : { width: 70, height:70}
-    const borderRadius = domiMode ? 46 : 36
+    const imageSize = { width: 70, height:70}
+    const borderRadius = 36
 
     return (
 
@@ -22,7 +22,7 @@ const UserTitle = (props) => {
                 />
             </View>
             <View>
-                <Text style={[_styles.nombre, domiMode ? {fontSize:22, fontWeight:"400"} : {}]}>{name}</Text>
+                <Text style={_styles.nombre}>{name}</Text>
                 {type && <Text style={_styles.label1}>{type}</Text>}
                 {data && 
                 <View>
@@ -32,7 +32,7 @@ const UserTitle = (props) => {
                     </View>
                     <View style={styles.rowLeft}>
                         <Text style={_styles.label1}>Reputación</Text>
-                        <Ranking value={4.7} />
+                        <Ranking value={data.rep} />
                     </View>
                 </View>
                 }
@@ -51,5 +51,5 @@ const _styles = {
     label1: {fontSize: 15, color: "#888", paddingVertical:2, marginRight:10},
     labelAzul: {fontSize: 15, paddingVertical:2, color: COLORS.blueText, fontWeight:"bold", letterSpacing: 3},
     labelGris: {fontSize: 15, marginLeft:8, color: "#6F757A", fontWeight:"bold"},
-    nombre: {fontSize: 18, color: COLORS.blueText, paddingVertical:2, fontWeight:"bold"}
+    nombre: {fontSize: 21, color: COLORS.blueText, paddingVertical:2, fontWeight:"400"}
 }

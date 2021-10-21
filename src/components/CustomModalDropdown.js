@@ -7,7 +7,7 @@ import { useCustomBackHandler } from '../hooks/useCustomBackHandler';
 
 export const CustomModalDropdown = ({
     items = [],
-    keyExtractor = (item) => `item_${item.value}`,
+    keyExtractor = (item) => `item_${item.id}`,
     onValueChange = () => { },
     placeHolder = "",
 
@@ -35,7 +35,7 @@ export const CustomModalDropdown = ({
                     <TouchableWithoutFeedback onPress={() => { }}>
                         <View>
                             <Text style={[styles.H1, {color: "#333", textAlign:"center", marginBottom: 20}]}>{placeHolder}</Text>
-                            <View style={{ alignSelf: 'center', width: '85%', maxHeight: '80%', backgroundColor:"white", borderRadius:10, overflow: "hidden", borderWidth: 1, borderColor: "#ddd" }}>
+                            <View style={{ alignSelf: 'center', width: '85%', backgroundColor:"white", borderRadius:10, overflow: "hidden", borderWidth: 1, borderColor: "#ddd" }}>
                                 
                                 <FlatList
                                     data={items}

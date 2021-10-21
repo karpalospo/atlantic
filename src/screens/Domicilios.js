@@ -1,45 +1,53 @@
-import React, { useRef, useEffect } from 'react';
-import { View, Text, Image, SafeAreaView } from 'react-native'
+import React, { useState, useEffect, useContext} from 'react';
+import { View, Text, Image, SafeAreaView, Alert } from 'react-native'
 import { styles } from '../global/styles';
 import Header from "../components/Header";
 import Card from '../components/Card'
 import { ScrollView } from 'react-native-gesture-handler';
+import { AuthContext } from '../context/AuthContext'
+import { API } from '../global/services'
 
 
 const Domicilios = (props) => {
     
-    const {data=[]} = props
+    const { getAuth} = useContext(AuthContext)
+
+    const [services, setServices] = useState([]);
+    const [user, setUser] = useState([]);
+
     useEffect(() => {
-      
-    }, [])
-
-    const dataDummy = [
-        { orden: "204756", status: "Entregado", fecha: "Sept 10 10:30pm", categoria: "Envío de documentos", dir1: "Cra 51 # 79-155 Alto Prado", dir2: "Cra 50 # 82-155 La Manga", valor: "$12.000"},
-        { orden: "204778", status: "Cancelado", fecha: "Oct 11 11:45pm", categoria: "Compra Supermercados", dir1: "Cra 51 # 79-155 Alto Prado", dir2: "Cra 50 # 82-155 La Manga", valor: "$11.000"},
-        { orden: "204976", status: "Entregado", fecha: "Dic 12 10:10pm", categoria: "Envío de documentos", dir1: "Cra 51 # 79-155 Alto Prado", dir2: "Cra 50 # 82-155 La Manga", valor: "$15.800"},
-        { orden: "204990", status: "Entregado", fecha: "Dic 22 09:30pm", categoria: "Envío de documentos", dir1: "Cra 51 # 79-155 Alto Prado", dir2: "Cra 50 # 82-155 La Manga", valor: "$9.800"},
-    ]
-
+        (async function () {
+            setUser(await getAuth())
+            const res = await API.POST.myServices({id: user.id})
+            if(!res.error && !res.message.error) {
+                setServices(res.message.data.services.data)
+            } else Alert.alert("Obtener Servicios", "Hubo un error al cargar los servicios.")
+        })()
+    }, [services])
 
     return (
         <SafeAreaView style={{ flex: 1, position:"relative", backgroundColor:"white" }}>
                 
-            <Header titleCenter="Mis Domicilios" navigation={props.navigation} />
+            <Header titleCenter="Mis Domicilios" navigation={props.navigation} onBack={() => props.navigation.goBack()} />
 
             <ScrollView style={{paddingHorizontal:30}}>
-                {dataDummy.map((item, index) => {
-                    return (
-                        <Card
-                            key={item.orden}
-                            status={item.status}
-                            fechaStatus={item.fecha}
-                            categoria={item.categoria}
-                            dir1={item.dir1}
-                            dir2={item.dir2}
-                            valor={item.valor}
-                            orden={item.orden}
-                        />
-                    )
+                {services.map((item, index) => {
+                    if(item.Status == "terminado") {
+                        return (
+                            <Card
+                                key={index}
+                                status={item.Status}
+                                fechaStatus={item.Fecha}
+                                categoria={item.Categoria}
+                                dir1={item.Dir1}
+                                dir2={item.Dir2}
+                                valor={item.Valor}
+                                orden={item.ID}
+                                forma={item.Forma}
+                                descripcion={item.Especificaciones}
+                            />
+                        )
+                    }
                 })}
                 <View style={{height:40}} />
             </ScrollView>

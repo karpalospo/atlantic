@@ -7,10 +7,9 @@ import UserTitle from '../components/UserTitle'
 import { AuthContext } from '../context/AuthContext'
 
 const Blank = (props) => {
- 
 
-    const { isAuth, loading, getAuth, setAuth} = useContext(AuthContext)
-    const [user, setUser] = useState({});
+    const { getAuth } = useContext(AuthContext)
+    const [user, setUser] = useState(false);
 
     async function init() {
         setUser(await getAuth())
@@ -20,8 +19,8 @@ const Blank = (props) => {
 
     useEffect(() => {
         init()
+    }, [user]);
 
-    });
 
 
     return (

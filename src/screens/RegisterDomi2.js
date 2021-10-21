@@ -6,50 +6,53 @@ import File from '../components/File'
 import Header from "../components/Header";
 import { API } from '../global/services'
 
+
 const Register = (props) => {
  
-
-
-    const [state, _setState] = useState(props.route.params.data || {});
     const [loading, setLoading] = useState(false);
+    const [userid, setUserid] = useState(props.route.params.user_id || 0);
 
-    const setState = async (value) => {
-        await _setState({...state, ...value})
-    }
 
-    useEffect(() => {
-    
+    const signInFiles = async () => {
 
-    });
+        let ret = false
+        ids.forEach(item => {
+            if(!files[item]) ret = true
+        })
 
-    const signIn = async () => {
-
-        state.tipo = "domi"
-
-        setLoading(true)
-        const res = await API.POST.signUp(state)
-
-        if(!res.error) {
-            
-            if(res.message && res.message.data && res.message.data.signup.data.affectedRows == 1) {
-                return props.navigation.navigate("singupconfirm")
-            } else {
-                Alert.alert("Registro", "Hubo un error al ingresar la información. Intente nuevamente.") 
-            }
-
-        } else {
-            Alert.alert("Registro", "Hubo un error al ingresar la información. Intente nuevamente.")
+        if(ret) {
+            Alert.alert("Registro", "Debe subir todos los archivos")
+            return
         }
-        setLoading(false)
+
+        return props.navigation.navigate("singupconfirm")
+
         
     }
 
-    const imageCallback = (result) => {
-        console.log(result)
-    }
-   
+    let files = {}
+    const ids = ["cc", "propiedad", "licencia", "tecno", "soat"]
+
     const image = require("../../assets/bg2.jpg")
     const logo = require("../../assets/logo-largo.png")
+
+    const cb = async (id, type, value) => {
+
+        console.log(id, type, value)
+        if(type == "complete") {
+            const res = await API.POST.setFile({
+                user_id: userid,
+                archivo: value.url,
+                label: id
+            })
+            console.log(res)
+            if(!res.error && res.message.data.files.data.affectedRows > 0) {
+                files[id] = true
+            } else {
+                Alert.alert("Registro", "Ocurrió un error al subir el archivo. Intente nuevamente")
+            }
+        }
+    }
 
 
     return (
@@ -73,12 +76,11 @@ const Register = (props) => {
                     <View style={{height:20}} />
 
 
-                    <File title="Revisión Tecnomecánica" callback={imageCallback} />
-                    <File title="Licencia de conducir" callback={imageCallback} />
-                    <File title="Fotocopia de cédula" callback={imageCallback} />
-                    <File title="Revisión Tecnomecánica" callback={imageCallback} />
-                    <File title="Tarjeta de propiedad" callback={imageCallback} />
-                    <File title="SOAT" callback={imageCallback} />
+                    <File title="Revisión Tecnomecánica" id="tecno" callback={cb} />
+                    <File title="Licencia de conducir" id="licencia" callback={cb} />
+                    <File title="Fotocopia de cédula" id="cc" callback={cb} />
+                    <File title="Tarjeta de propiedad" id="propiedad" callback={cb} />
+                    <File title="SOAT" id="soat" callback={cb} />
    
                     <Text style={[styles.p, {color: "red"}]}>El tamaño de cada archivo no debe superar los 2 MB</Text>
                     <View style={{height:20}} />
@@ -87,7 +89,7 @@ const Register = (props) => {
                         <Button 
                             title="Registrarme"
                             buttonStyle={{minWidth:200}}
-                            onPress={signIn}
+                            onPress={signInFiles}
                         />
                     </View>
                 </View>

@@ -8,20 +8,37 @@ import {Ionicons, MaterialIcons} from 'react-native-vector-icons'
 export default function Camara(props) {
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
+    const [cameraRef, setCameraRef] = useState(false);
+
 
     useEffect(() => {
         (async () => {
             const { status } = await Camera.requestPermissionsAsync();
             setHasPermission(status === 'granted');
         })();
-    }, []);
+    }, [hasPermission]);
 
     if (hasPermission === null) {
         return <View />;
     }
     if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+        return <Text>Debe permitir acceso a la camara</Text>;
     }
+
+    
+
+    onPictureSaved = photo => {
+        props.navigation.navigate("Alert", {photo: photo.uri})
+        //console.log(photo);
+    } 
+
+    takePicture = () => {
+
+        if (cameraRef) {
+            cameraRef.takePictureAsync({ onPictureSaved });
+        }
+    };
+
     return (
         <View style={{ backgroundColor:"yellow", flex: 1 }}>
             
@@ -45,7 +62,7 @@ export default function Camara(props) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{ width: 60, height: 60, backgroundColor: COLORS.red, borderRadius:31, borderWidth:2, borderColor:"white" }}
-                    onPress={() => {}}
+                    onPress={takePicture}
                 />
                 <TouchableOpacity
                     style={{ width: 40, height: 40}}
@@ -60,9 +77,7 @@ export default function Camara(props) {
                 </TouchableOpacity>
             </View>
 
-            <Camera style={{ flex: 1, position:"relative", zIndex:0 }} type={type}>
- 
-            </Camera>
+            <Camera style={{ flex: 1, position:"relative", zIndex:0 }} type={type} ref={ref => setCameraRef(ref)} />
 
         </View>
     );

@@ -19,6 +19,7 @@ const HTTP_STATUS_CODE = {
 
 const HEADER_JSON =  { 'content-type': 'application/json' } 
 const HEADER_FORM_ENCODED =  {'Content-Type': 'application/x-www-form-urlencoded'}
+const HEADER_FORM_DATA = {'content-type': 'multipart/form-data'}
 
 const HTTP_REQUEST_METHOD = {
     GET: 'GET',
@@ -87,48 +88,47 @@ export const API = {
 
     POST: {
 
-        async search(search, location) {
-            return await fetchAsync(`${URL.server2}/search`, HTTP_REQUEST_METHOD.POST, { body: FormUrlEncoded({search, location}), headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
-        },
-
-        async checkEmail(email) {
-            return await fetchAsync(`${URL.HOST}/economia/site/users/sendemailrestore`, HTTP_REQUEST_METHOD.POST, { body: FormUrlEncoded({ email}), headers:  {'Content-Type': 'application/x-www-form-urlencoded'}});
-        },
-
-        async cambiarContrasena(email, code, password) {
-            return await fetchAsync(`${URL.HOST}/economia/site/users/restorepassv2`, HTTP_REQUEST_METHOD.POST, { body: FormUrlEncoded({ email, code, password}), headers:  {'Content-Type': 'application/x-www-form-urlencoded'}});
-        },
-
-        async SignIn (email, password)
-        {
-         
+        async SignIn (email, password) {
             return await fetchAsync(`${URL.server2}/signin`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify({email, password}), headers: HEADER_JSON});
-
         },
 
-        async getServices (params = {})
-        {
-         
-            return await fetchAsync(`${URL.server2}/services`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
-
+        async UpdateProfile (data) {
+            return await fetchAsync(`${URL.server2}/update`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(data), headers: HEADER_JSON});
         },
-
-        async setService (params = {})
-        {
-         
-            return await fetchAsync(`${URL.server2}/service`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
-
-        },
-
-        async setServiceData (params = {})
-        {
-         
-            return await fetchAsync(`${URL.server2}/servicedata`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
-
-        },
-
         
+        async getServices (params = {}) {
+            return await fetchAsync(`${URL.server2}/services`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
 
+        async getServices (params = {}) {
+            return await fetchAsync(`${URL.server2}/services`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
+
+        async myServices (params = {}) {
+            return await fetchAsync(`${URL.server2}/myservices`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
+
+        async setService (params = {}) {
+            return await fetchAsync(`${URL.server2}/service`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
+
+        async setServiceData (params = {}) {
+            return await fetchAsync(`${URL.server2}/servicedata`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
+
+        async setFile (params = {}) {
+            return await fetchAsync(`${URL.server2}/setfile`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
+
+        async setAlerta (params = {}) {
+            return await fetchAsync(`${URL.server2}/setalerta`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
+
+        async Calificar (params = {}) {
+            return await fetchAsync(`${URL.server2}/calificar`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
+
+ 
         async signUp (fields)
         {
             const _fields = {
@@ -140,10 +140,12 @@ export const API = {
                 celular: fields.celular, 
                 password: fields.password,
                 municipio: fields.municipios.value,
-                documento: fields.documento, 
-                t_sangre: fields.phone,
                 tipo: fields.tipo
             }
+
+            if(fields.documento) _fields.documento = fields.documento
+            if(fields.t_sangre) _fields.t_sangre = fields.tipoSangre.value
+            
 
             let response = await fetchAsync(`${URL.server2}/signup/`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(_fields), headers: HEADER_JSON});
             
@@ -155,120 +157,10 @@ export const API = {
             return response;
         },
 
-        async getPedido(id) {
-            return await fetchAsync(`${URL.HOST}/economia/api/pedidos/getbyid/${id}`, HTTP_REQUEST_METHOD.POST)
-        },
-
-        async PerformPasswordRecovery (email)
-        {
-            let response = await fetchAsync(`${URL.HOST}/economia/site/users/restore/`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify({email}),});
-            
-            if(!response.message.success)
-            {
-                response.error = true;
-            }
-
-            return response;
-        },
-
-
-        async PerformEditProfile(document, name, email, token, {password = '', newName, newDocument, dateOfBirth, phone, cellphone})
-        {
-            let response = {
-                error: false,
-                message: '',
-            }
-
-            const _fields = {
-                userInfo: {    
-                    nit: document,
-                    email,
-                    nombres: name, 
-                    auth_token: token,
-                },
-                user: {
-                    email,
-                    password,
-                    confirm_password: password,
-                    nombres: newName, 
-                    nit: newDocument,
-                    fecha_nacimiento: dateOfBirth,
-                    celular: cellphone,
-                    telefono: phone,
-                }
-            }
-            
-            response = await fetchAsync(`${URL.HOST}/economia/site/users/updateUserProfile`, HTTP_REQUEST_METHOD.POST, {body: TwoLevelFormUrlEncoded(_fields), headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
-            
-            if(!response.message.success)
-            {
-                response.error = true;
-            }
-            
-
-            return response;
-
-        },
 
 
 
-        async PerformValidateTypeOfCoupon (typeOfCoupon, products) 
-        {            
-            let response = await fetchAsync(`${URL.HOST}/economia/api/validaCondiciones/`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify({Condicion: typeOfCoupon, Productos: products})});
-            
-            if(!response.message.Success)
-            {
-                response.error = true;
-            }
-
-            return response;
-
-        },
-
-        async checkout(a, b, c, d, e) {
-            return await fetchAsync(`${URL.server2}/checkout`, HTTP_REQUEST_METHOD.POST, {body: 
-                FormUrlEncoded(a) + '&' +
-                TwoLevelFormUrlEncoded(b) + 
-                TwoLevelFormUrlEncoded(c) +
-                TwoLevelFormUrlEncoded(d) +
-                ArrayFormUrlEncoded(e), headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
-        },
-
-        async ValidateToken (document, name, email, token)
-        {
-            const _fields = {
-                nit: document,
-                email,
-                nombres: name, 
-                auth_token: token,
-            }
-
-            let response = await fetchAsync(`${URL.HOST}/economia/site/users/validateToken/`, HTTP_REQUEST_METHOD.POST, {body: FormUrlEncoded(_fields), headers: {'Content-Type': 'application/x-www-form-urlencoded'}});
-            
-            if(!response.message.success)
-            {
-                response.error = true;
-            }
-
-            return response;
-
-        },
-
-        // Delete address /economia/site/users/deleteMyDirecciones
-        /*
-            body: url-encode
-            userInfo: loginCtrl.getUserInfo(),
-            MyDireccion: {
-                nombre_direccion: nombre_direccion
-            }
-        */
-    },
-    PUT: {
-
-    },
-    DELETE: {
-
-    },
+    }
 }
 
 

@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, SafeAreaView, TextInput, KeyboardAvoidingView, Text, Platform, Image, ScrollView } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, SafeAreaView, TextInput, Alert, Image, ScrollView } from 'react-native'
 import { styles, COLORS } from '../global/styles'
 import Button from '../components/Button'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { CustomSelectPicker } from '../components/CustomSelectPicker'
-import {Entypo} from 'react-native-vector-icons'
 import Header from "../components/Header";
-
+import { API } from '../global/services'
 
 const Register = (props) => {
  
@@ -17,6 +15,7 @@ const Register = (props) => {
     }
 
     const [state, _setState] = useState(props.route.params.data || {});
+    const [loading, setLoading] = useState(false);
 
 
     const setState = async (value) => {
@@ -32,6 +31,30 @@ const Register = (props) => {
     const image = require("../../assets/bg2.jpg")
     const logo = require("../../assets/logo-largo.png")
 
+    const signUp = async () => {
+        //props.navigation.navigate("singup3", {user_id: 69})
+
+        
+        state.tipo = "domi"
+
+        setLoading(true)
+        console.log(state)
+        const res = await API.POST.signUp(state)
+        console.log(res)
+        if(!res.error) {
+            
+            if(res.message && res.message.data && res.message.data.signup.data.affectedRows == 1) {
+                props.navigation.navigate("singup3", {user_id: res.message.data.signup.data.insertId})
+            } else {
+                Alert.alert("Registro", "Hubo un error al ingresar la información. Intente nuevamente.") 
+            }
+
+        } else {
+            Alert.alert("Registro", "Hubo un error al ingresar la información. Intente nuevamente.")
+        }
+        setLoading(false)
+
+    }
 
     return (
         <SafeAreaView style={styles.main}>
@@ -69,18 +92,30 @@ const Register = (props) => {
 
                     <TextInput
                         style={styles.input}
-                        placeholder={"Teléfono Celular"}
-                        value={state.celular}
-                        onChangeText={v => setState({celular: v})}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder={"Correo Electrónico"}
+                        placeholder="Correo Electrónico"
+                        textContentType='emailAddress'
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        autoCompleteType='email'
                         value={state.email}
                         onChangeText={v => setState({email: v})}
                     />
 
-                    
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Contraseña"
+                        secureTextEntry={true}
+                        value={state.password}
+                        onChangeText={v => setState({password: v})}
+                    />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder={"Teléfono Celular"}
+                        value={state.celular}
+                        onChangeText={v => setState({celular: v})}
+                    />
 
                     <TextInput
                         style={styles.input}
@@ -136,11 +171,12 @@ const Register = (props) => {
 
                     <View style={{alignItems:"center"}} >
                         <Button 
+                            loading={loading}
                             title="Continuar"
                             styleMode="blue"
                             buttonStyle={{minWidth:200}}
                             textStyle={{fontSize:18}}
-                            onPress={() => props.navigation.navigate("singup3", {data: state})}
+                            onPress={signUp}
                         />
                     </View>
 

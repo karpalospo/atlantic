@@ -11,6 +11,9 @@ const Provider = ({ children }) => {
     const [userDetails, setUserDetails] = useState(null)
     const [code, setCode] = useState(null)
     const [balance, setBalance] = useState({})
+    const [stopLoopServices, setStopLoopServices] = useState(false)
+    const [stopLoopServicesID, setStopLoopServicesID] = useState(false)
+    const [loopOrden, setLoopOrden] = useState(false)
 
     
     let loopingServices = false
@@ -26,7 +29,9 @@ const Provider = ({ children }) => {
         loopingServices = true
 
         for(let i = 0; i <= 9999999; i++) {
-   
+            
+            if(stopLoopServices) break;
+
             const res = await API.POST.getServices()
             if(!res.error) {
                 if(res.message.data) {
@@ -38,21 +43,23 @@ const Provider = ({ children }) => {
  
     }
 
-    const loopServicesID = async (orden, callback) => {
+    const loopServicesID = async (callback) => {
         
         if(loopingServicesID) return
         loopingServicesID = true
 
         for(let i = 0; i <= 9999999; i++) {
-   
-            const res = await API.POST.getServices({orden})
-
-            if(!res.error) {
-                if(res.message.data) {
-                    callback(res.message.data[orden])
+            
+            if(stopLoopServicesID) break;
+            if(loopOrden) {
+                const res = await API.POST.getServices({orden: loopOrden})
+                if(!res.error) {
+                    if(res.message.data) {
+                        callback(res.message.data[loopOrden])
+                    }
                 }
             }
-            await sleep(6000);
+            await sleep(5000);
         }
  
     }
@@ -70,7 +77,11 @@ const Provider = ({ children }) => {
         setCode,
 
         loopServices,
-        loopServicesID
+        setStopLoopServices,
+        setLoopOrden,
+
+        loopServicesID,
+        setStopLoopServicesID
 
     }
     return (

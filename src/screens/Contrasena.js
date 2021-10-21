@@ -1,24 +1,21 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, SafeAreaView, TextInput, Image, ScrollView } from 'react-native'
+import React, { useState, useEffect, useContext } from 'react'
+import { View, SafeAreaView, TextInput, ScrollView, Alert } from 'react-native'
 import { styles, COLORS } from '../global/styles'
 import Button from '../components/Button'
 import { CustomSelectPicker } from '../components/CustomSelectPicker'
 import Header from "../components/Header";
 import UserTitle from '../components/UserTitle'
 import { AuthContext } from '../context/AuthContext'
+import { API } from '../global/services'
 
 const Perfil = (props) => {
  
     const [password, setPassword] = useState("");
     const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(false);
 
-    const values = {
-        tipoSangre: [{id: "0", label: "A+", value: "A+"}, {id: "1", label: "A-", value: "A-"}],
-        departamentos: [{id: "0", label: "Atlántico", value: "1"}, {id: "1", label: "Bolivar", value: "2"}],
-        municipios: [{id: "0", label: "Barranquilla", value: "1"}, {id: "1", label: "Soledad", value: "2"}] 
-    }
 
-    const [state, _setState] = useState({});
+    const [state, _setState] = useState({oldpassword:"", password:"", password2:""});
 
     const { getAuth} = useContext(AuthContext)
 
@@ -43,8 +40,25 @@ const Perfil = (props) => {
         await _setState({...state, ...value})
     }
 
-    const signIn = async () => {
-        console.log(state)
+    const updateProfile = async () => {
+
+        if(state.oldpassword.trim() == "") return Alert.alert("Error de Validación", "Escriba la contraseña anterior")
+        if(state.password.trim() == "") return Alert.alert("Error de Validación", "Escriba una contraseña nueva")
+        if(state.password.trim() != state.password2.trim()) return Alert.alert("Error de Validación", "La confirmación de la contraseña no coincide")
+
+        let sendData = {...state}
+        sendData.id = user.id
+        setLoading(true)
+        const res = await API.POST.UpdateProfile(sendData)
+        setLoading(false)
+        console.log(res)
+        if(!res.error && !res.message.error) {
+            Alert.alert("Actualización", "La informacion se actualizó correctamente")
+            setState({oldpassword: "", password: "", password2: ""})
+        } else {
+            if(res.message && res.message.data) Alert.alert("Actualización", res.message.data.errorText)
+            else Alert.alert("Actualización", "Hubo un error al intentar grabar la información")
+        }
     }
    
 
@@ -71,8 +85,8 @@ const Perfil = (props) => {
                         <TextInput
                             style={styles.input}
                             placeholder={"Contraseña Anterior"}
-                            value={state.contra1}
-                            onChangeText={v => setState({nombres: v})}
+                            value={state.oldpassword}
+                            onChangeText={v => setState({oldpassword: v})}
                         />
     
                         <TextInput
@@ -83,28 +97,27 @@ const Perfil = (props) => {
                             autoCapitalize='none'
                             autoCorrect={false}
                             autoCompleteType='email'
-                            value={state.contra2}
-                            onChangeText={v => setState({email: v})}
+                            value={state.password}
+                            onChangeText={v => setState({password: v})}
                         />
 
                         <TextInput
                             style={styles.input}
                             placeholder={"Confirmar Contraseña"}
-                            value={state.contra3}
-                            onChangeText={v => setState({telefono: v})}
+                            value={state.password2}
+                            onChangeText={v => setState({password2: v})}
                         />
 
-
-                        
                        
                         <View style={{height:30}} />
 
           
                         <View style={{alignItems:"center"}}>
                             <Button 
+                                loading={loading}
                                 title="Actualizar"
                                 buttonStyle={{minWidth:200}}
-                                onPress={signIn}
+                                onPress={updateProfile}
                             />
                     
                             <View style={{height:20}} />
