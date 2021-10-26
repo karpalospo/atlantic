@@ -39,7 +39,7 @@ const customStyles = {
 
 const Status = (props) => {
  
-    const { loopServicesID, setStopLoopServicesID, setLoopOrden } = useContext(UtilitiesContext)
+    const { loopServicesID, setLoopOrden } = useContext(UtilitiesContext)
 
     const [currentPosition, setcurrentPosition] = useState(0);
 
@@ -73,6 +73,7 @@ const Status = (props) => {
         setData(props.route.params.data)
         setUser(props.route.params.user)
         setUserClient(props.route.params.data.user)
+        setcurrentPosition(0)
     }, [props.route.params.data])
 
     
@@ -93,7 +94,6 @@ const Status = (props) => {
     //setServiceData
     const image = require("../../assets/face.jpg")
 
-
     const vermas = (item) => {
         setModalVisible(true)
     }
@@ -110,7 +110,9 @@ const Status = (props) => {
                         Tu servicio ha sido solicitado a las 3:00 pm {"\n"} La hora estimada de entrega a las 3:30 pm
                     </Text>*/}
 
-                    <View style={{height:10}} />
+                    {data && <View style={{marginVertical:10, flexDirection:"row", justifyContent:"center", alignItems:"center"}} >
+                        <Text>N° Orden {data.orden}</Text> 
+                    </View>}
 
                     <StepIndicator
                         stepCount={3}
@@ -131,9 +133,9 @@ const Status = (props) => {
                         
                         <View style={{height:10}} />
 
-
                         {data &&
                         <Card
+                            orden={data.orden}
                             status={data.status}
                             fechaStatus={data.fecha}
                             categoria={data.categoria}

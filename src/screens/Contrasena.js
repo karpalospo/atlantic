@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import { View, SafeAreaView, TextInput, ScrollView, Alert } from 'react-native'
 import { styles, COLORS } from '../global/styles'
 import Button from '../components/Button'
-import { CustomSelectPicker } from '../components/CustomSelectPicker'
 import Header from "../components/Header";
 import UserTitle from '../components/UserTitle'
 import { AuthContext } from '../context/AuthContext'
@@ -10,7 +9,6 @@ import { API } from '../global/services'
 
 const Perfil = (props) => {
  
-    const [password, setPassword] = useState("");
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -20,7 +18,7 @@ const Perfil = (props) => {
     const { getAuth} = useContext(AuthContext)
 
     useEffect(() => {
-        async function init() {
+        (async function () {
             const user = await getAuth()
             setUser(user)
             setState({
@@ -30,9 +28,8 @@ const Perfil = (props) => {
                 celular: user.celular,
                 direccion: user.direccion,
             })
-        }
-        init()
-        
+        })()
+  
     }, []);
 
     const setState = async (value) => {
@@ -78,7 +75,7 @@ const Perfil = (props) => {
                         <View style={{height:20}} />
                         
 
-                        <UserTitle name={`${user.nombres} ${user.apellidos}`} image={image} type={user.tipo == "domi" ? "Domiciliario" : "Cliente"} />
+                        <UserTitle name={user.shortname} image={image} type={user.tipo == "domi" ? "Domiciliario" : "Cliente"} />
 
                         <View style={{height:30}} />
 

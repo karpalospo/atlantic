@@ -28,7 +28,7 @@ const UserTitle = (props) => {
                 <View>
                     <View style={styles.rowLeft}>
                         <Text style={_styles.label1}>Placa:</Text>
-                        <Text style={{fontWeight:"bold", fontSize:16, letterSpacing: 2}}>{data.placa}</Text>
+                        <Text style={{fontWeight:"bold", fontSize:16, letterSpacing: 1, color:"#333"}}>{data.placa}</Text>
                     </View>
                     <View style={styles.rowLeft}>
                         <Text style={_styles.label1}>Reputación</Text>

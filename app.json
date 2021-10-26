@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Altantiexpress",
+    "name": "Atlantiexpress",
     "slug": "atlantiexpress",
     "owner": "karpalospo",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -29,7 +29,7 @@
       },
       "package": "com.karpalospo.tudo",
       "permissions": [ "CAMERA", "CAMERA_ROLL" ],
-      "versionCode": 4
+      "versionCode": 6
     },
     "web": {
       "favicon": "./assets/favicon.png"

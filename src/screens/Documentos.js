@@ -13,31 +13,18 @@ import {Ionicons, Feather} from 'react-native-vector-icons'
 
 const Documentos = (props) => {
 
-    const { isAuth, loading, getAuth, setAuth} = useContext(AuthContext)
+    const { getAuth } = useContext(AuthContext)
  
-    const [state, _setState] = useState({});
 
     const [user, setUser] = useState({});
 
 
-    async function init() {
-        setUser( await getAuth())
-
-        _setState({
-            nombres: user.nombres,
-            apellidos: user.apellidos,
-            email: user.email,
-            celular: user.celular,
-            direccion: user.direccion,
-        })
-    }
-
     useEffect(() => {
-        
-        init()
-        
-    }, []);
-
+        if(user) return
+        (async function () {
+            setUser(await getAuth())
+        })()
+    });
 
 
     const imageCallback = (result) => {
@@ -59,7 +46,7 @@ const Documentos = (props) => {
      
                         <View style={{height:20}} />
 
-                        <UserTitle name={`${user.nombres} ${user.apellidos}`} image={image} type={user.tipo == "domi" ? "Domiciliario" : "Cliente"} />
+                        <UserTitle name={user.shortname} image={image} type={user.tipo == "domi" ? "Domiciliario" : "Cliente"} />
 
                         <View style={styles.rowCenter}>
                             <Text style={styles.p}>Estado: </Text>

@@ -107,6 +107,12 @@ const Status = (props) => {
         props.navigation.navigate("Home")
     }
 
+    const cancel = async() => {
+        setLoading(true)
+        const res = await sendData({status:"cancelado"})
+        setLoading(false)
+        props.navigation.navigate("Home")
+    }
 
     return (
         <SafeAreaView style={{ flex: 1, position:"relative", backgroundColor:"white" }}>
@@ -148,9 +154,9 @@ const Status = (props) => {
                     <View>
                         <ActivityIndicator color="#999" />
                         <Text style={styles.p}>Esperando respuesta de un domiciliario</Text>
-                        <Text style={{fontSize:13, color:"#999", textAlign:"center", marginBottom:30}}>59 Segundos...</Text>
+                        {/* <Text style={{fontSize:13, color:"#999", textAlign:"center", marginBottom:30}}>59 Segundos...</Text> */}
                         <View style={[styles.row, {justifyContent:"center"}]}>
-                            <Button title="Cancelar" onPress={() => props.navigation.navigate("Home")} styleMode="red" buttonStyle={{minWidth:150}} />
+                            <Button title="Cancelar servicio" onPress={cancel} styleMode="red" buttonStyle={{minWidth:150}} />
                         </View>
                     </View>
                     }

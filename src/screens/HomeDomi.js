@@ -11,11 +11,11 @@ import Card from '../components/Card'
 import Ranking from "../components/Ranking";
 import { API } from '../global/services'
 import {Feather, Ionicons} from 'react-native-vector-icons'
-
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeDomi = (props) => {
 
-    const { getAuth} = useContext(AuthContext)
+    const { getAuth, updateUser} = useContext(AuthContext)
     const { loopServices, setStopLoopServices } = useContext(UtilitiesContext)
 
     const [user, setUser] = useState(false);
@@ -54,7 +54,20 @@ const HomeDomi = (props) => {
         }
     }, [user]);
 
-
+    useFocusEffect(
+        React.useCallback(() => {
+            (async function() {
+                if(!user.id) return
+                const res = await API.POST.getUser({id: user.id});
+                if(!res.error && res.message) {
+                    let user = res.message.data.user.data[0]
+                    console.log(res)
+                    updateUser({calif_sum: user.calif_sum, calif_veces: user.calif_veces})
+                    setUser(await getAuth())
+                }
+            })()
+        }, [])
+    );
 
     const image = require("../../assets/face.jpg")
 
@@ -66,7 +79,7 @@ const HomeDomi = (props) => {
                     shortname: user.shortname,
                     celular: user.celular,
                     foto: user.foto,
-                    rep: user.calif_veces ? user.calif_sum / user.calif_veces : 0,
+                    rep: user.calif_veces ? (user.calif_sum / user.calif_veces).toFixed(1) : 0,
                     placa: user.placa
                 }
             })
@@ -75,7 +88,8 @@ const HomeDomi = (props) => {
                 const res2 = await API.POST.setServiceData({orden: data.orden, persist: true, domi_id: user.id})
                 props.navigation.navigate("StatusDomi", {data})
             } else {
-                Alert.alert("Atlantiexpress", "Hubo un error al conectarse al servidor.")
+                if(res.message.data && res.message.data.msgError) Alert.alert("Atlantiexpress", res.message.data.msgError)
+                else Alert.alert("Atlantiexpress", "Hubo un error al conectarse al servidor.")
                 setLoading(false)
             }
                 
@@ -91,7 +105,6 @@ const HomeDomi = (props) => {
         setModalVisible(true)
         setCurrentItem(item)
     }
-
 
     return (
         <SafeAreaView style={{ flex: 1, position:"relative", backgroundColor:"white" }}>
@@ -113,7 +126,7 @@ const HomeDomi = (props) => {
 
                         <Text style={{fontSize:19, padding:3, fontWeight:"bold"}}>¡Bienvenido {user.shortname}!</Text>
                         <Text style={{fontSize:16, padding:8}}>Mi reputación</Text>
-                        <Ranking value={user.calif_veces ? user.calif_sum / user.calif_veces : 0} />
+                        <Ranking value={user.calif_veces ? (user.calif_sum / user.calif_veces).toFixed(1) : 0} />
 
                     </View>
 
@@ -123,7 +136,8 @@ const HomeDomi = (props) => {
                     {!enableSwitch &&
                         <View style={_styles.message}>
                             <Feather name="alert-triangle" size={40} color={COLORS.red} />   
-                            <Text style={styles.p}>Estas en modo invisible. No recibirás servicios.</Text>
+                            <Text style={styles.p}>Estas en modo invisible.</Text>
+                            <Text style={[styles.p, {fontSize: 16}]}>NO RECIBIRÁS SERVICIOS</Text>
                         </View>
                     }
 
@@ -199,7 +213,7 @@ const HomeDomi = (props) => {
                         <View style={{height:30}} />
                         <Button
                             loading={loading}
-                            title="Aceptar"
+                            title="Aceptar servicio"
                             styleMode="red"
                             buttonStyle={{minWidth:200}}
                             textStyle={{fontSize:18}}

@@ -41,11 +41,17 @@ const Provider = ({ children }) => {
         return user
     }
 
+    const updateUser = async (data) => {
+        setUser(Object.assign(user, data))
+   
+    }
+
     const value = {
         login,
         isAuth,
         loading,
         getAuth,
+        updateUser,
         setAuth: (value, user) => {
             
             if(user.id) user.shortname = shortName(user)

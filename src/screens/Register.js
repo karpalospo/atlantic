@@ -5,14 +5,11 @@ import Button from '../components/Button'
 import { CustomSelectPicker } from '../components/CustomSelectPicker'
 import Header from "../components/Header";
 import { API } from '../global/services'
+import { values } from '../global/constants'
 
 const Register = (props) => {
  
-    const values = {
-        tipoSangre: [{id: "0", label: "A+", value: "A+"}, {id: "1", label: "A-", value: "A-"}],
-        departamentos: [{id: "0", label: "Atlántico", value: "1"}, {id: "1", label: "Bolivar", value: "2"}],
-        municipios: [{id: "0", label: "Barranquilla", value: "1"}, {id: "1", label: "Soledad", value: "2"}] 
-    }
+
 
     const [state, _setState] = useState({});
     const [loading, setLoading] = useState(false);

@@ -47,7 +47,7 @@ const File = (props) => {
             type: [DocumentPicker.types.pdf],
         })*/
 
-        if(!result.cancelled || !result.cancel) {
+        if(!result.cancelled) {
             setImagePicked(true)
         } else {
             setImagePicked(false)

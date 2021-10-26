@@ -22,9 +22,9 @@ const Card = (props) => {
                     <Text numberOfLines={1} style={[_styles.labelAzul, {flex: 1}]}>{descripcion}</Text>
                 </View>
                 <View style={{flex:1, alignItems:"flex-end"}}>
-                    {onVerMas && <Button title="Ver Mas" styleMode="blue" buttonStyle={{minWidth:90, paddingHorizontal:8, paddingVertical:8}} textStyle={{fontSize:16}} onPress={() => onVerMas(item)} />}
-                    {/*orden && !onVerMas && <Text style={_styles.label1}>Orden</Text>*/}
-                    {/*orden && !onVerMas  && <Text style={_styles.labelNegro}>{orden}</Text>*/}
+                    {onVerMas && <Button title="Ver mas" styleMode="blue" buttonStyle={{minWidth:90, paddingHorizontal:8, paddingVertical:8}} textStyle={{fontSize:16}} onPress={() => onVerMas(item)} />}
+                    {/*orden && <Text style={_styles.label1}>Orden</Text>*/}
+                    {/*orden && <Text style={_styles.labelNegro}>{orden}</Text>*/}
                 </View>
             </View>
 
@@ -59,7 +59,7 @@ const Card = (props) => {
                     </View>
                 </View>
             </View>
-            {domi && 
+            {domi && false &&
             <View style={[styles.rowCenter, {paddingTop: 10}]} >
                 <Text style={[_styles.labelGris, {marginRight:0}]}>disponible </Text>
                 <Text style={[_styles.labelRojo]}> 59 Segundos</Text>
@@ -67,7 +67,7 @@ const Card = (props) => {
             }
             {domi && 
              <View style={[styles.rowCenter, {paddingTop: 10}]} >
-                <Button styleMode="red" title="Aceptar" buttonStyle={{paddingVertical:12, minWidth:180}} onPress={() => accept(item)} />
+                <Button styleMode="red" title="Aceptar servicio" buttonStyle={{paddingVertical:12, minWidth:180}} onPress={() => accept(item)} />
             </View>
             }
     

@@ -93,8 +93,8 @@ const NavigationStack = () => {
                                     <MenuItem title="Inicio" subtitle={"Solicita aquí tu servicio"} onPress={() => props.navigation.navigate("Home")} />
                                 }
                                 <MenuItem title="Mi Perfíl" subtitle="Edita tus datos básicos y de contacto" onPress={() => props.navigation.navigate("Perfil")} />
-                                {(user.tipo && user.tipo == "domi") && <MenuItem title="Mis Documentos" subtitle="Revisa el historial de tus domicilios" onPress={() => props.navigation.navigate("Documentos")} />}
                                 <MenuItem title="Contraseña" subtitle="Edita tu contraseña de acceso" onPress={() => props.navigation.navigate("Contrasena")} />
+                                {(user.tipo && user.tipo == "domi" && false) && <MenuItem title="Mis Documentos" subtitle="Revisa el historial de tus domicilios" onPress={() => props.navigation.navigate("Documentos")} />}
                                 <MenuItem title="Mis Domicilios" subtitle="Revisa el historial de tus domicilios" onPress={() => props.navigation.navigate("Domicilios")} />
                                 {/*<MenuItem title="Ayuda" subtitle="Consulta y aprende sobre Atlantiexpress" onPress={() => props.navigation.navigate("Ayuda")} />*/}
                                 <View style={{height:30}}/>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { View, SafeAreaView, TextInput, Image, ScrollView, Alert } from 'react-native'
 import { styles, COLORS } from '../global/styles'
+
+import { values } from '../global/constants'
 import Button from '../components/Button'
 import { CustomSelectPicker } from '../components/CustomSelectPicker'
 import Header from "../components/Header";
@@ -16,12 +18,6 @@ const Perfil = (props) => {
 
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(false);
-
-    const values = {
-        tipoSangre: [{id: "0", label: "A+", value: "A+"}, {id: "1", label: "A-", value: "A-"}],
-        departamentos: [{id: "0", label: "Atlántico", value: "1"}, {id: "1", label: "Bolivar", value: "2"}],
-        municipios: [{id: "0", label: "Barranquilla", value: "1"}, {id: "1", label: "Soledad", value: "2"}] 
-    }
 
     const [state, _setState] = useState({});
 
@@ -76,7 +72,7 @@ const Perfil = (props) => {
                         <View style={{height:20}} />
                         
 
-                        <UserTitle name={`${user.nombres} ${user.apellidos}`} image={image} type={user.tipo == "domi" ? "Domiciliario" : "Cliente"} />
+                        <UserTitle name={user.shortname} image={image} type={user.tipo == "domi" ? "Domiciliario" : "Cliente"} />
 
                         <View style={{height:30}} />
 
@@ -119,26 +115,23 @@ const Perfil = (props) => {
                             value={state.direccion}
                             onChangeText={v => setState({direccion: v})}
                         />
-                        <View style={{flexDirection:"row"}}>
-                            <View style={[styles.input, {width:"48%"}]}>
-                                <CustomSelectPicker
-                                    items={values["departamentos"]}
-                                    style={{ justifyContent: 'center' }}
-                                    onValueChange={v => setState({departamentos: v})}
-                                    placeHolder="Departamento"
-                                />
-                            </View>
-                            <View style={{width:"4%"}}/>
-                            <View style={[styles.input, {width:"48%"}]}>
-                                <CustomSelectPicker
-                                    items={values["municipios"]}
-                                    style={{ justifyContent: 'center' }}
-                                    onValueChange={v => setState({municipios: v})}
-                                    placeHolder="Municipio"
-                                />
-                            </View>
+      
+                        <View style={styles.input}>
+                            <CustomSelectPicker
+                                items={values["departamentos"]}
+                                style={{ justifyContent: 'center' }}
+                                onValueChange={v => setState({departamentos: v})}
+                                placeHolder="Departamento"
+                            />
                         </View>
-                        
+                        <View style={styles.input}>
+                            <CustomSelectPicker
+                                items={values["municipios"]}
+                                style={{ justifyContent: 'center' }}
+                                onValueChange={v => setState({municipios: v})}
+                                placeHolder="Municipio"
+                            />
+                        </View>
                        
                         <View style={{height:30}} />
 

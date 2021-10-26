@@ -108,6 +108,10 @@ export const API = {
             return await fetchAsync(`${URL.server2}/myservices`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
         },
 
+        async myServicesDomi (params = {}) {
+            return await fetchAsync(`${URL.server2}/myservicesdomi`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
+
         async setService (params = {}) {
             return await fetchAsync(`${URL.server2}/service`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
         },
@@ -119,6 +123,11 @@ export const API = {
         async setFile (params = {}) {
             return await fetchAsync(`${URL.server2}/setfile`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
         },
+
+        async getUser (params = {}) {
+            return await fetchAsync(`${URL.server2}/getuser`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
+        },
+
 
         async setAlerta (params = {}) {
             return await fetchAsync(`${URL.server2}/setalerta`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(params), headers: HEADER_JSON});
@@ -144,7 +153,7 @@ export const API = {
             }
 
             if(fields.documento) _fields.documento = fields.documento
-            if(fields.t_sangre) _fields.t_sangre = fields.tipoSangre.value
+            if(fields.tipoSangre) _fields.t_sangre = fields.tipoSangre.label
             
 
             let response = await fetchAsync(`${URL.server2}/signup/`, HTTP_REQUEST_METHOD.POST, {body: JSON.stringify(_fields), headers: HEADER_JSON});
@@ -156,8 +165,6 @@ export const API = {
 
             return response;
         },
-
-
 
 
     }

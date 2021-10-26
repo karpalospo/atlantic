@@ -9,6 +9,7 @@ import {MaterialCommunityIcons} from 'react-native-vector-icons'
 import MapView, {Marker} from 'react-native-maps';
 import { AuthContext } from '../context/AuthContext'
 import Geocoder from 'react-native-geocoding';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const width = Dimensions.get('window').width
@@ -28,24 +29,30 @@ const Home = (props) => {
 
     const [direccion, setDireccion] = useState("");
     const [mapRegion, setMapRegion] = useState({
-        latitude: 10.9878,
-        longitude: -74.7999,
+        latitude: 10.795556,
+        longitude: -74.919444,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     })
 
     useEffect(() => {
+        if(user.tipo == "domi") return props.navigation.navigate("HomeDomi")
         if(user) return
         (async function () {
             setUser(await getAuth())
         })()
     });
 
+    useFocusEffect(
+        React.useCallback(() => {
+            if(user.tipo == "domi") return props.navigation.navigate("HomeDomi")
+        }, [])
+    )
+
 
     const moto = require("../../assets/moto.jpg")
     const marker = require("../../assets/pin.png")
 
-    
     const categorias = [
         {id: 0, label: "Seleccione Categoria", value: "0"},
         {id: 1, label: "Documentos y/o papeles", value: "Documentos y/o papeles"},
@@ -65,13 +72,10 @@ const Home = (props) => {
     ]
 
 
-
     const setState = async (value) => {
         //if(typeof value != "Object") return
         await _setState({...state, ...value})
     }
-
-
 
     Geocoder.init("AIzaSyCSHufZP3SrsM_B5syDB6HugWbbgqDqLxE");
 
@@ -114,6 +118,7 @@ const Home = (props) => {
 
         if(!res.error && !res.message.error) {
             setLoading(false)
+            setState({especificaciones:"", valor:""})
             return props.navigation.navigate("Status", {data: res.message.data})
         } else {
             Alert.alert("Generar Pedido", "Hubo un error al generar el pedido. Intente nuevamente")

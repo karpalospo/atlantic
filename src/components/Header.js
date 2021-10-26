@@ -9,7 +9,7 @@ import * as WebBrowser from 'expo-web-browser';
 const Header = (props) => {
     
 
-    const {onBack, titleCenter, onSwitch, enableSwitch = false, noMenu} = props
+    const {onBack, titleCenter, onSwitch, enableSwitch = false, noMenu, navigation} = props
 
 
     const logo = require("../../assets/logo-menu.png")
@@ -37,7 +37,7 @@ const Header = (props) => {
                     noMenu ? 
                     <View style={{width:40}} /> 
                     :
-                    <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
+                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Feather name={"menu"} color={COLORS.mainBlue} size={34} style={{padding:10}} />
                     </TouchableOpacity>
                 }

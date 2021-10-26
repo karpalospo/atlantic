@@ -18,7 +18,13 @@ const Domicilios = (props) => {
     useEffect(() => {
         (async function () {
             setUser(await getAuth())
-            const res = await API.POST.myServices({id: user.id})
+            let res
+            if(user.tipo == "domi") {
+                res = await API.POST.myServicesDomi({id: user.id})
+            } else {
+                res = await API.POST.myServices({id: user.id})
+            }
+            
             if(!res.error && !res.message.error) {
                 setServices(res.message.data.services.data)
             } else Alert.alert("Obtener Servicios", "Hubo un error al cargar los servicios.")

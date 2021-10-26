@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Text, View, SafeAreaView, TextInput, Image, TouchableOpacity, ScrollView, Modal, Dimensions, Alert as ALt} from "react-native";
-import { useFocusEffect } from '@react-navigation/native';
+
 import { COLORS, styles } from "../global/styles";
 import { AuthContext } from '../context/AuthContext'
 import Header from "../components/Header";
@@ -35,17 +35,18 @@ const Alert = (props) => {
     }
 
     const t_alertas = [
-        {id: 0, label: "Accidente en la vía", value: "Accidente en la vía"},
-        {id: 1, label: "Hurto o Robo", value: "Hurto o Robo"},
-        {id: 2, label: "Incendio", value: "Incendio"},
-        {id: 3, label: "Riña", value: "Riña"},
-        {id: 4, label: "Arroyo peligroso", value: "Arroyo peligroso"},
-        {id: 5, label: "Actividad sospechosa", value: "Actividad sospechosa"},
-        {id: 6, label: "Enfrentamiento armado", value: "Enfrentamiento armado"},
-        {id: 7, label: "Persona(s) en peligro", value: "Persona(s) en peligro"},
-        {id: 8, label: "Mascota pérdida", value: "Mascota pérdida"},
-        {id: 9, label: "Calle obstruida", value: "Calle obstruida"},
-        {id: 10, label: "Otro", value: "Otro"},
+        {id: 0, label: "Selecciona un motivo", value: "0"},
+        {id: 1, label: "Accidente en la vía", value: "Accidente en la vía"},
+        {id: 2, label: "Hurto o Robo", value: "Hurto o Robo"},
+        {id: 3, label: "Incendio", value: "Incendio"},
+        {id: 4, label: "Riña", value: "Riña"},
+        {id: 5, label: "Arroyo peligroso", value: "Arroyo peligroso"},
+        {id: 6, label: "Actividad sospechosa", value: "Actividad sospechosa"},
+        {id: 7, label: "Enfrentamiento armado", value: "Enfrentamiento armado"},
+        {id: 8, label: "Persona(s) en peligro", value: "Persona(s) en peligro"},
+        {id: 9, label: "Mascota pérdida", value: "Mascota pérdida"},
+        {id: 10, label: "Calle obstruida", value: "Calle obstruida"},
+        {id: 11, label: "Otro", value: "Otro"},
     ]
 
     const enviarAlerta = async () => {
@@ -96,8 +97,6 @@ const Alert = (props) => {
     if (hasPermission === false) {
         return <Text>Debe permitir acceso a la camara</Text>;
     }
-
-    
 
     onPictureSaved = photo => {
         setPhoto(photo.uri)
