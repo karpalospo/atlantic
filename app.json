@@ -2,8 +2,8 @@
   "expo": {
     "name": "Atlantiexpress",
     "slug": "atlantiexpress",
-    "owner": "karpalospo",
-    "version": "1.0.4",
+    "owner": "javimau",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -27,7 +27,7 @@
           "apiKey":"AIzaSyCSHufZP3SrsM_B5syDB6HugWbbgqDqLxE"
         }
       },
-      "package": "com.karpalospo.tudo",
+      "package": "com.atlantiexpress.app",
       "permissions": [ "CAMERA", "CAMERA_ROLL" ],
       "versionCode": 6
     },

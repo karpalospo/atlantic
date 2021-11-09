@@ -1,4 +1,4 @@
-package com.karpalospo.tudo;
+package com.atlantiexpress.app;
 import android.content.res.Configuration;
 import android.content.Intent;
 

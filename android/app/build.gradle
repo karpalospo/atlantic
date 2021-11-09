@@ -132,11 +132,11 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.karpalospo.tudo'
+        applicationId 'com.atlantiexpress.app'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 6
+        versionName "1.0.6"
     }
     splits {
         abi {
